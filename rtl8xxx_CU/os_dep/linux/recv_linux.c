@@ -194,7 +194,9 @@ void rtw_handle_tkip_mic_err(_adapter *padapter,u8 bgroup)
 	_rtw_memset( &wrqu, 0x00, sizeof( wrqu ) );
 	wrqu.data.length = sizeof( ev );
 
+#ifndef CONFIG_IOCTL_CFG80211
 	wireless_send_event( padapter->pnetdev, IWEVMICHAELMICFAILURE, &wrqu, (char*) &ev );
+#endif	
 }
 
 void rtw_hostapd_mlme_rx(_adapter *padapter, union recv_frame *precv_frame)
