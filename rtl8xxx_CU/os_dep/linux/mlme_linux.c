@@ -160,7 +160,7 @@ extern void indicate_wx_scan_complete_event(_adapter *padapter);
 void rtw_os_indicate_scan_done( _adapter *padapter, bool aborted)
 {
 #ifdef CONFIG_IOCTL_CFG80211
-	rtw_cfg80211_indicate_scan_done(wdev_to_priv(padapter->rtw_wdev), aborted);
+	rtw_cfg80211_indicate_scan_done(padapter, aborted);
 #endif
 	indicate_wx_scan_complete_event(padapter);
 }
@@ -256,6 +256,7 @@ _func_exit_;
 
 void rtw_report_sec_ie(_adapter *adapter,u8 authmode,u8 *sec_ie)
 {
+#ifndef CONFIG_IOCTL_CFG80211
 	uint	len;
 	u8	*buff,*p,i;
 	union iwreq_data wrqu;
@@ -291,10 +292,8 @@ _func_enter_;
 		wrqu.data.length=p-buff;
 		
 		wrqu.data.length = (wrqu.data.length<IW_CUSTOM_MAX) ? wrqu.data.length:IW_CUSTOM_MAX;
-
-#ifndef CONFIG_IOCTL_CFG80211		
+		
 		wireless_send_event(adapter->pnetdev,IWEVCUSTOM,&wrqu,buff);
-#endif
 
 		if(buff)
 		    rtw_mfree(buff, IW_CUSTOM_MAX);
@@ -302,7 +301,7 @@ _func_enter_;
 	}
 
 _func_exit_;
-
+#endif
 }
 
 void _survey_timer_hdl (void *FunctionContext)
@@ -371,6 +370,7 @@ void init_mlme_ext_timer(_adapter *padapter)
 
 void rtw_indicate_sta_assoc_event(_adapter *padapter, struct sta_info *psta)
 {
+#ifndef CONFIG_IOCTL_CFG80211	
 	union iwreq_data wrqu;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
@@ -389,14 +389,14 @@ void rtw_indicate_sta_assoc_event(_adapter *padapter, struct sta_info *psta)
 	_rtw_memcpy(wrqu.addr.sa_data, psta->hwaddr, ETH_ALEN);
 
 	DBG_871X("+rtw_indicate_sta_assoc_event\n");
-
-#ifndef CONFIG_IOCTL_CFG80211	
+	
 	wireless_send_event(padapter->pnetdev, IWEVREGISTERED, &wrqu, NULL);
 #endif
 }
 
 void rtw_indicate_sta_disassoc_event(_adapter *padapter, struct sta_info *psta)
 {
+#ifndef CONFIG_IOCTL_CFG80211	
 	union iwreq_data wrqu;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
@@ -415,7 +415,7 @@ void rtw_indicate_sta_disassoc_event(_adapter *padapter, struct sta_info *psta)
 	_rtw_memcpy(wrqu.addr.sa_data, psta->hwaddr, ETH_ALEN);
 
 	DBG_871X("+rtw_indicate_sta_disassoc_event\n");
-#ifndef CONFIG_IOCTL_CFG80211	
+	
 	wireless_send_event(padapter->pnetdev, IWEVEXPIRED, &wrqu, NULL);
 #endif	
 }
