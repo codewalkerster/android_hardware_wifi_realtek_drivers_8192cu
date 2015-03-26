@@ -463,10 +463,10 @@ unsigned int rtw_classify8021d(struct sk_buff *skb)
 
 static u16 rtw_select_queue(struct net_device *dev, struct sk_buff *skb
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 13, 0)
-	, void *accel_priv
-#endif
+ 					, void *accel_priv
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 14, 0)
-	, select_queue_fallback_t fallback
+ 				, select_queue_fallback_t fallback
+#endif
 #endif
 )
 {
@@ -513,9 +513,13 @@ u16 rtw_recv_select_queue(struct sk_buff *skb)
 
 #endif
 
-static int rtw_ndev_notifier_call(struct notifier_block * nb, unsigned long state, void *ndev)
+static int rtw_ndev_notifier_call(struct notifier_block * nb, unsigned long state, void *ptr)
 {
-	struct net_device *dev = ndev;
+#if (LINUX_VERSION_CODE>=KERNEL_VERSION(3,11,0))
+	struct net_device *dev = netdev_notifier_info_to_dev(ptr);
+#else	
+	struct net_device *dev = ptr;
+#endif
 
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,29))
 	if (dev->netdev_ops->ndo_do_ioctl != rtw_ioctl)
