@@ -36,6 +36,8 @@
 #endif
 #endif /* defined(RTW_ENABLE_WIFI_CONTROL_FUNC) */
 
+#undef CONFIG_COMPAT
+
 const char *android_wifi_cmd_str[ANDROID_WIFI_CMD_MAX] = {
 	"START",
 	"STOP",
