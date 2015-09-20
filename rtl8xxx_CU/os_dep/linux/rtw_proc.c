@@ -263,7 +263,7 @@ static int proc_get_rf_reg_dump(struct seq_file *m, void *v)
 }
 
 
-int proc_reset_rx_info(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
+ssize_t proc_reset_rx_info(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
