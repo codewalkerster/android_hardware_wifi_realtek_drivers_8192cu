@@ -524,6 +524,14 @@ KVER  := 3.3.0
 #KSRC:= ../lichee/linux-3.3/
 endif
 
+ifeq ($(CONFIG_ARCH_MESON64_ODROID_COMMON), y)
+ARCH ?= arm64
+CROSS_COMPILE ?= aarch64-linux-gnu-
+KVER := 4.9
+KSRC ?= ../../../../../common/
+CONFIG_RTL8192CU ?= m
+endif
+
 ifneq ($(USER_MODULE_NAME),)
 MODULE_NAME := $(USER_MODULE_NAME)
 endif
