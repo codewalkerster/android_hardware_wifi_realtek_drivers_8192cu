@@ -12,6 +12,12 @@ The new `rtl8xxxu` driver initially introduced in kernel 4.4 works mostly well t
 If `rtl8xxxu` gives you problems, try troubleshooting it first. Known things to look for are:
   - Make sure to blacklist the older `rtl8192cu` driver, which some distros seem to load by default otherwise.
   - Some devices require that power management be disabled in NetworkManager. Follow the instructions further down to disable power management in NetworkManager. Typical symptoms would be that the device works fine for a moment, and then becomes very slow or outright drops the connection.
+  - If your device is not detected, make sure that your kernel enables [CONFIG\_RTL8XXXU\_UNTESTED](https://elixir.bootlin.com/linux/latest/source/drivers/net/wireless/realtek/rtl8xxxu/Kconfig#L26)
+  - Be sure to set the options for DMA aggregation and dual-band 2.4 GHz:
+
+        echo options rtl8xxxu ht40_2g=1 dma_aggregation=1 | sudo tee /etc/modprobe.d/rtl8xxxu.conf
+
+    then reboot.
 
 In some cases, though, this driver has been known to work fine where `rtl8xxxu` doesn't. If `rtl8xxxu` doesn't work for you even after the troubleshooting steps listed above, follow the instructions below to install this one instead.
 
@@ -26,6 +32,7 @@ These devices are known to work with this driver:
 - Kootek KT-RPWF (0bda:8176)
 - OurLink 150M 802.11n (0bda:8176)
 - Plugable USB 2.0 Wireless N 802.11n (0bda:8176)
+- TP-Link TL-WN725N (0bda:8176)
 - TP-Link TL-WN821N**v4** (0bda:8178)
 - TP-Link TL-WN822N (0bda:8178)
 - TP-Link TL-WN823N (only models that use the rtl8192cu chip)
