@@ -16,6 +16,8 @@ EXTRA_CFLAGS += -Wno-unused
 
 EXTRA_CFLAGS += -Wno-uninitialized
 
+EXTRA_CFLAGS += -Wno-enum-compare
+
 EXTRA_CFLAGS += -I$(src)/include
 
 CONFIG_AUTOCFG_CP = n
@@ -70,6 +72,7 @@ CONFIG_PLATFORM_MSTAR_TITANIA12 = n
 CONFIG_PLATFORM_MSTAR_A3 = n
 CONFIG_PLATFORM_ARM_SUNxI = n
 CONFIG_PLATFORM_ARM_SUN6I = n
+CONFIG_PLATFORM_ARM_ANDROID_AML = y
 
 CONFIG_DRVEXT_MODULE = n
 
@@ -530,6 +533,14 @@ CROSS_COMPILE ?= aarch64-linux-gnu-
 KVER := 4.9
 KSRC ?= ../../../../../common/
 CONFIG_RTL8192CU ?= m
+endif
+
+ifeq ($(CONFIG_PLATFORM_ARM_ANDROID_AML), y)
+EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
+ARCH ?= arm
+CROSS_COMPILE := arm-linux-gnueabihf-
+KSRC := ../../../../../../common
+KVER:= 3.10
 endif
 
 ifneq ($(USER_MODULE_NAME),)
